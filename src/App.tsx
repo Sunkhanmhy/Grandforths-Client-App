@@ -802,17 +802,19 @@ function DashboardLayout() {
             <input type="text" placeholder="Search news, events or topics..." aria-label="Search" />
           </div>
           <div className="topbar-right">
-            <button type="button" className="notification-button" aria-label="Notifications">
+            <button type="button" className="notification-button" aria-label="Notifications" onClick={() => navigate('/documents')}>
               <AppIcon name="bell" size={18} />
               <span className="notification-badge">3</span>
             </button>
-            <div className="profile-chip">
-              <img src="/images/portrait-03.jpg" alt="Daniel Johnson" />
-              <div>
-                <strong>Good morning,</strong>
-                <span>Daniel Johnson</span>
+            <button type="button" className="profile-chip-button" onClick={() => navigate('/profile')} aria-label="Open profile">
+              <div className="profile-chip">
+                <img src="/images/portrait-03.jpg" alt="Daniel Johnson" />
+                <div>
+                  <strong>Good morning,</strong>
+                  <span>Daniel Johnson</span>
+                </div>
               </div>
-            </div>
+            </button>
           </div>
         </header>
 
@@ -1304,6 +1306,7 @@ function SupportPage() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<'All' | AdminTicket['status']>('All')
   const [page, setPage] = useState(1)
+  const [activeModule, setActiveModule] = useState<'form' | 'tickets'>('form')
   const pageSize = 5
 
   const [form, setForm] = useState({
@@ -1323,7 +1326,6 @@ function SupportPage() {
   })
 
   const pageCount = Math.max(1, Math.ceil(filteredTickets.length / pageSize))
-  const visibleTickets = filteredTickets.slice((page - 1) * pageSize, page * pageSize)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target
@@ -1351,83 +1353,94 @@ function SupportPage() {
     setPage(1)
   }
 
-  return (
-    <section className="simple-page">
-      <div className="card-panel table-card">
-        <div className="panel-header"><h2>IT Support & Admin</h2></div>
-        <form className="kyc-form booking-form" onSubmit={handleSubmit}>
-          <label>
-            <span>Submitted By</span>
-            <input type="text" name="submittedBy" value={form.submittedBy} onChange={handleChange} />
-          </label>
-          <label>
-            <span>Client Email</span>
-            <input type="email" name="clientEmail" value={form.clientEmail} onChange={handleChange} placeholder={getCurrentUserEmail()} />
-          </label>
-          <label>
-            <span>Subject</span>
-            <input type="text" name="subject" value={form.subject} onChange={handleChange} placeholder="Access issue to secure portal" />
-          </label>
-          <label>
-            <span>Category</span>
-            <select name="category" value={form.category} onChange={handleChange}>
-              <option>Portal Access</option>
-              <option>File Upload</option>
-              <option>Billing</option>
-              <option>Data Request</option>
-              <option>General Enquiry</option>
-            </select>
-          </label>
-          <label>
-            <span>Priority</span>
-            <select name="priority" value={form.priority} onChange={handleChange}>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-              <option value="Urgent">Urgent</option>
-            </select>
-          </label>
-          <label className="full-span">
-            <span>Description</span>
-            <textarea name="description" value={form.description} onChange={handleChange} rows={5} />
-          </label>
-          <button type="submit" className="primary-button full-width-button">Submit Ticket</button>
-        </form>
-      </div>
+  const currentPage = Math.min(page, pageCount)
+  const visiblePageTickets = filteredTickets.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
-      <div className="card-panel table-card">
-        <div className="panel-header"><h2>Support Tickets</h2></div>
-        <div className="table-controls">
-          <input type="text" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1) }} placeholder="Filter tickets by subject, category, email..." />
-          <select value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value as 'All' | AdminTicket['status']); setPage(1) }}>
-            <option value="All">All Statuses</option>
-            <option value="Open">Open</option>
-            <option value="In Review">In Review</option>
-            <option value="Resolved">Resolved</option>
-          </select>
+  return (
+    <section className="simple-page support-module-page">
+      <div className="card-panel table-card support-module-panel">
+        <div className="panel-header module-header">
+          <h2>IT & Admin Support</h2>
+          <div className="module-switcher" aria-label="Support modules">
+            <button type="button" className={activeModule === 'form' ? 'tag-button active compact-button' : 'tag-button compact-button'} onClick={() => setActiveModule('form')}>IT Admin Form</button>
+            <button type="button" className={activeModule === 'tickets' ? 'tag-button active compact-button' : 'tag-button compact-button'} onClick={() => setActiveModule('tickets')}>Support Ticket</button>
+          </div>
         </div>
-        <div className="session-table-wrap">
-          <table className="data-table session-table">
-            <thead><tr><th>ID</th><th>Client</th><th>Subject</th><th>Priority</th><th>Status</th><th>Created</th></tr></thead>
-            <tbody>
-              {visibleTickets.map((ticket) => (
-                <tr key={ticket.id}>
-                  <td>{ticket.id}</td>
-                  <td>{ticket.clientEmail}</td>
-                  <td>{ticket.subject}</td>
-                  <td>{ticket.priority}</td>
-                  <td><span className={`status-badge ${ticket.status === 'Resolved' ? 'success' : 'neutral'}`}>{ticket.status}</span></td>
-                  <td>{ticket.createdAt}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="pagination-row">
-          <button type="button" className="ghost-button" disabled={page === 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>Previous</button>
-          <span>Page {page} of {pageCount}</span>
-          <button type="button" className="ghost-button" disabled={page === pageCount} onClick={() => setPage((value) => Math.min(pageCount, value + 1))}>Next</button>
-        </div>
+
+        {activeModule === 'form' ? (
+          <form className="kyc-form booking-form compact-form" onSubmit={handleSubmit}>
+            <label>
+              <span>Submitted By</span>
+              <input type="text" name="submittedBy" value={form.submittedBy} onChange={handleChange} />
+            </label>
+            <label>
+              <span>Client Email</span>
+              <input type="email" name="clientEmail" value={form.clientEmail} onChange={handleChange} placeholder={getCurrentUserEmail()} />
+            </label>
+            <label>
+              <span>Subject</span>
+              <input type="text" name="subject" value={form.subject} onChange={handleChange} placeholder="Access issue to secure portal" />
+            </label>
+            <label>
+              <span>Category</span>
+              <select name="category" value={form.category} onChange={handleChange}>
+                <option>Portal Access</option>
+                <option>File Upload</option>
+                <option>Billing</option>
+                <option>Data Request</option>
+                <option>General Enquiry</option>
+              </select>
+            </label>
+            <label>
+              <span>Priority</span>
+              <select name="priority" value={form.priority} onChange={handleChange}>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </label>
+            <label className="full-span">
+              <span>Description</span>
+              <textarea name="description" value={form.description} onChange={handleChange} rows={5} />
+            </label>
+            <button type="submit" className="primary-button compact-button full-width-button">Submit Ticket</button>
+          </form>
+        ) : (
+          <>
+            <div className="table-controls">
+              <input type="text" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1) }} placeholder="Filter tickets by subject, category, email..." />
+              <select value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value as 'All' | AdminTicket['status']); setPage(1) }}>
+                <option value="All">All Statuses</option>
+                <option value="Open">Open</option>
+                <option value="In Review">In Review</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+            </div>
+            <div className="session-table-wrap">
+              <table className="data-table session-table">
+                <thead><tr><th>ID</th><th>Client</th><th>Subject</th><th>Priority</th><th>Status</th><th>Created</th></tr></thead>
+                <tbody>
+                  {visiblePageTickets.map((ticket) => (
+                    <tr key={ticket.id}>
+                      <td>{ticket.id}</td>
+                      <td>{ticket.clientEmail}</td>
+                      <td>{ticket.subject}</td>
+                      <td>{ticket.priority}</td>
+                      <td><span className={`status-badge ${ticket.status === 'Resolved' ? 'success' : 'neutral'}`}>{ticket.status}</span></td>
+                      <td>{ticket.createdAt}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="pagination-row support-pagination-row">
+              <button type="button" className="ghost-button compact-button" disabled={currentPage === 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>Previous</button>
+              <span>Page {currentPage} of {pageCount}</span>
+              <button type="button" className="ghost-button compact-button" disabled={currentPage === pageCount} onClick={() => setPage((value) => Math.min(pageCount, value + 1))}>Next</button>
+            </div>
+          </>
+        )}
       </div>
     </section>
   )
