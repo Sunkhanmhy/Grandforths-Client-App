@@ -24,7 +24,7 @@ export function ProfilePage() {
           </label>
           <label>
             Email
-            <input defaultValue="jane@hergers-law.com" />
+            <input defaultValue="jane@grandforthlegal.com" />
           </label>
           <label>
             Phone

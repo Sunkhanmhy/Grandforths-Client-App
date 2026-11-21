@@ -66,7 +66,7 @@ type AdminTicket = {
   description: string
 }
 
-const logoUrl = '/images/hergers-logo.png'
+const logoUrl = '/images/grandforth-logo.png'
 
 const navItems: NavItem[] = [
   { label: 'Dashboard', path: '/dashboard', icon: 'dashboard' },
@@ -162,10 +162,10 @@ const adminNewsSeed: NewsItem[] = [
   },
 ]
 
-const NEWS_DB_KEY = 'hergers_public_news'
-const BOOKINGS_DB_KEY = 'hergers_client_sessions'
-const USER_DB_KEY = 'hergers_user_database'
-const ADMIN_DB_KEY = 'hergers_admin_database'
+const NEWS_DB_KEY = 'grandforth_public_news'
+const BOOKINGS_DB_KEY = 'grandforth_client_sessions'
+const USER_DB_KEY = 'grandforth_user_database'
+const ADMIN_DB_KEY = 'grandforth_admin_database'
 
 function readLocalStore<T>(key: string, fallback: T): T {
   try {
@@ -205,7 +205,7 @@ const initialSessions: BookingSession[] = [
 
 function getCurrentUserEmail() {
   const currentSession = readStoredSession() as { email?: string } | null
-  return currentSession?.email ?? 'guest@hergers.local'
+  return currentSession?.email ?? 'guest@grandforthlegal.local'
 }
 
 function getDefaultUserProfile(email = getCurrentUserEmail()): UserKycProfile {
@@ -776,9 +776,9 @@ function DashboardLayout() {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand-row">
-          <img src={logoUrl} alt="Herger's & Co. logo" className="brand-mark" />
+          <img src={logoUrl} alt="Grandforth Legal Practitioners logo" className="brand-mark" />
           <div>
-            <div className="brand-name">Herger's & Co.</div>
+            <div className="brand-name">Grandforth Legal Practitioners</div>
             <div className="brand-subtitle">Justice • Integrity • Results</div>
           </div>
         </div>
@@ -1283,7 +1283,7 @@ function SupportPage() {
     {
       id: 'SUP-1010',
       submittedBy: 'Admin Team',
-      clientEmail: 'support@hergers.local',
+      clientEmail: 'support@grandforthlegal.local',
       subject: 'Access issue to secure portal',
       category: 'Portal Access',
       priority: 'High',
@@ -1294,7 +1294,7 @@ function SupportPage() {
     {
       id: 'SUP-1011',
       submittedBy: 'Admin Team',
-      clientEmail: 'support@hergers.local',
+      clientEmail: 'support@grandforthlegal.local',
       subject: 'Client document upload failed',
       category: 'File Upload',
       priority: 'Medium',
@@ -1467,7 +1467,7 @@ function AuthShell({ badge, leftTitle, subTitle, formTitle, description, form }:
     <div className="auth-page-shell">
       <header className="auth-header">
         <div className="logo-inline">
-          <img src={logoUrl} alt="Herger's & Co. logo" className="brand-mark" />
+          <img src={logoUrl} alt="Grandforth Legal Practitioners logo" className="brand-mark" />
           {leftTitle ? (
             <div className="logo-text">
               <span className="logo-name">{leftTitle}</span>

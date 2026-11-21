@@ -1,6 +1,6 @@
 import { createClient, type Session, type User } from '@supabase/supabase-js'
 
-const SESSION_STORAGE_KEY = 'hergers_client_session'
+const SESSION_STORAGE_KEY = 'grandforth_client_session'
 const DEMO_USER_ID = 'demo-client-user'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL ?? ''

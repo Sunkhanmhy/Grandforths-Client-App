@@ -17,7 +17,7 @@ export function DashboardLayout() {
         <div className="brand-row">
           <div className="brand-mark">H</div>
           <div>
-            <div className="brand-name">Herger&apos;s</div>
+            <div className="brand-name">Grandforth Legal Practitioners</div>
             <div className="brand-subtitle">Client Portal</div>
           </div>
         </div>

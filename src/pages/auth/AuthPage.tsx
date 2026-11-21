@@ -7,7 +7,7 @@ export function AuthPage() {
   const { session, signIn, signUp, signInWithGoogle, signInWithMicrosoft } = useAuth();
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('client@hergers-law.com');
+  const [email, setEmail] = useState('client@grandforthlegal.com');
   const [password, setPassword] = useState('Welcome123!');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -59,7 +59,7 @@ export function AuthPage() {
         <div className="logo-inline">
           <div className="brand-mark">H</div>
           <div className="logo-text">
-            <div className="logo-name">Herger&apos;s & Co.</div>
+            <div className="logo-name">Grandforth Legal Practitioners & Co.</div>
             <div className="logo-subtitle">Client Law Portal</div>
           </div>
         </div>

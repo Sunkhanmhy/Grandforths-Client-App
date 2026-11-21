@@ -1,6 +1,6 @@
-# Herger's & Co. Clients App
+# Grandforth Legal Practitioners Clients App
 
-A production-ready client portal for Herger's & Co. built with React, TypeScript, Vite, and Supabase-ready architecture. The app includes:
+A production-ready client portal for Grandforth Legal Practitioners built with React, TypeScript, Vite, and Supabase-ready architecture. The app includes:
 
 - mobile-first login and signup screens
 - protected client dashboard
